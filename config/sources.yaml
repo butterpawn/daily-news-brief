@@ -1,0 +1,33 @@
+malaysia:
+  - name: "Free Malaysia Today"
+    url: "https://www.freemalaysiatoday.com/feeds/rss/headlines/"
+  - name: "Bernama"
+    url: "https://www.bernama.com/en/rssfeed.php"
+  - name: "Malay Mail - Malaysia"
+    url: "https://www.malaymail.com/feed/rss/malaysia"
+
+world:
+  - name: "BBC News World"
+    url: "http://feeds.bbci.co.uk/news/world/rss.xml"
+  - name: "Al Jazeera"
+    url: "https://www.aljazeera.com/xml/rss/all.xml"
+
+technology:
+  - name: "TechCrunch"
+    url: "https://techcrunch.com/feed/"
+  - name: "The Verge"
+    url: "https://www.theverge.com/rss/index.xml"
+
+environment:
+  - name: "The Guardian - Environment"
+    url: "https://www.theguardian.com/environment/rss"
+
+design:
+  - name: "Dezeen"
+    url: "https://www.dezeen.com/feed/"
+  - name: "ArchDaily"
+    url: "https://www.archdaily.com/rss"
+
+business:
+  - name: "The Guardian - Business"
+    url: "https://www.theguardian.com/uk/business/rss"
