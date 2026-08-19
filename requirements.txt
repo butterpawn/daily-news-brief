@@ -1,0 +1,5 @@
+feedparser>=6.0.11
+ebooklib>=0.18
+google-generativeai>=0.8.0
+PyYAML>=6.0.1
+python-dateutil>=2.9.0
