@@ -1,0 +1,29 @@
+name: Test - Fetch News Only
+
+# Manual trigger only, for testing Step 3. This does NOT run on a
+# schedule and does NOT commit anything -- it just proves fetch_news.py
+# works and shows you which feeds succeeded/failed in the log.
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run fetch_news.py
+        run: python scripts/fetch_news.py
+
+      - name: Show article count per section
+        run: python -c "import json; d=json.load(open('data/articles.json')); [print(f'{k}: {len(v)} articles') for k,v in d['sections'].items()]"
