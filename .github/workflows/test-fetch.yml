@@ -1,0 +1,25 @@
+name: Test - Fetch News Only
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run fetch_news.py
+        run: python scripts/fetch_news.py
+
+      - name: Show article count per section
+        run: python scripts/print_summary.py
