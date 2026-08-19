@@ -1,9 +1,5 @@
 name: Test - Fetch News Only
 
-# Manual trigger only, for testing Step 3. This does NOT run on a
-# schedule and does NOT commit anything -- it just proves fetch_news.py
-# works and shows you which feeds succeeded/failed in the log.
-
 on:
   workflow_dispatch:
 
@@ -26,4 +22,10 @@ jobs:
         run: python scripts/fetch_news.py
 
       - name: Show article count per section
-        run: python -c "import json; d=json.load(open('data/articles.json')); [print(f'{k}: {len(v)} articles') for k,v in d['sections'].items()]"
+        run: |
+          python -c "
+          import json
+          d = json.load(open('data/articles.json'))
+          for k, v in d['sections'].items():
+              print(f'{k}: {len(v)} articles')
+          "
