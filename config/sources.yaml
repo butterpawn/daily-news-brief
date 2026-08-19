@@ -31,8 +31,6 @@ design:
 cities:
   - name: "The Guardian - Cities" 
     url: "https://www.theguardian.com/cities/rss"
-  - name: "Next City" 
-    url: "https://nextcity.org/feeds/features"
     
 business:
   - name: "The Guardian - Business"
