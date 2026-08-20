@@ -3,6 +3,9 @@ name: Test - Full Pipeline
 on:
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   test-pipeline:
     runs-on: ubuntu-latest
@@ -29,11 +32,16 @@ jobs:
       - name: Run build_epub.py
         run: python scripts/build_epub.py
 
-      - name: List generated EPUB
-        run: ls -la docs/briefs/
+      - name: Run update_catalog.py
+        run: python scripts/update_catalog.py
 
-      - name: Upload EPUB as downloadable artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: daily-brief-epub
-          path: docs/briefs/*.epub
+      - name: Show catalog
+        run: cat docs/catalog.xml
+
+      - name: Commit and push generated files
+        run: |
+          git config user.name "Daily Brief Bot"
+          git config user.email "actions@github.com"
+          git add docs/
+          git diff --staged --quiet && echo "Nothing new to commit" || git commit -m "Update daily brief and catalog"
+          git push
