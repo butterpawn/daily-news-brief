@@ -15,7 +15,8 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
-import google.generativeai as genai
+from google import genai
+from google.genai import types
 
 logging.basicConfig(
     level=logging.INFO,
@@ -26,7 +27,7 @@ log = logging.getLogger("summarize")
 ARTICLES_PATH = Path(__file__).parent.parent / "data" / "articles.json"
 BRIEF_PATH = Path(__file__).parent.parent / "data" / "brief.json"
 
-MODEL_NAME = "gemini-2.5-flash"
+MODEL_NAME = "gemini-flash-latest"
 
 SECTION_TARGETS = {
     "malaysia": {"count": "3-5", "length": "2-4 sentences"},
@@ -112,12 +113,14 @@ def call_gemini(prompt):
         log.error("GEMINI_API_KEY not set in environment")
         sys.exit(1)
 
-    genai.configure(api_key=api_key)
-    model = genai.GenerativeModel(MODEL_NAME)
+    client = genai.Client(api_key=api_key)
 
-    response = model.generate_content(
-        prompt,
-        generation_config={"response_mime_type": "application/json"},
+    response = client.models.generate_content(
+        model=MODEL_NAME,
+        contents=prompt,
+        config=types.GenerateContentConfig(
+            response_mime_type="application/json",
+        ),
     )
 
     text = response.text.strip()
