@@ -12,6 +12,7 @@ import json
 import logging
 import os
 import sys
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -107,6 +108,10 @@ def build_prompt(sections):
     return "\n".join(lines)
 
 
+MAX_RETRIES = 4
+RETRY_DELAYS = [5, 15, 45, 90]  # seconds, exponential-ish backoff
+
+
 def call_gemini(prompt):
     api_key = os.environ.get("GEMINI_API_KEY")
     if not api_key:
@@ -115,22 +120,39 @@ def call_gemini(prompt):
 
     client = genai.Client(api_key=api_key)
 
-    response = client.models.generate_content(
-        model=MODEL_NAME,
-        contents=prompt,
-        config=types.GenerateContentConfig(
-            response_mime_type="application/json",
-        ),
-    )
+    last_error = None
+    for attempt in range(1, MAX_RETRIES + 1):
+        try:
+            response = client.models.generate_content(
+                model=MODEL_NAME,
+                contents=prompt,
+                config=types.GenerateContentConfig(
+                    response_mime_type="application/json",
+                ),
+            )
 
-    text = response.text.strip()
-    if text.startswith("```"):
-        text = text.strip("`")
-        if text.startswith("json"):
-            text = text[4:]
-        text = text.strip()
+            text = response.text.strip()
+            if text.startswith("```"):
+                text = text.strip("`")
+                if text.startswith("json"):
+                    text = text[4:]
+                text = text.strip()
 
-    return json.loads(text)
+            return json.loads(text)
+
+        except Exception as e:
+            last_error = e
+            is_last_attempt = attempt == MAX_RETRIES
+            if is_last_attempt:
+                break
+            delay = RETRY_DELAYS[attempt - 1]
+            log.warning(
+                "Attempt " + str(attempt) + "/" + str(MAX_RETRIES) + " failed (" + str(e) + "). "
+                "Retrying in " + str(delay) + "s..."
+            )
+            time.sleep(delay)
+
+    raise last_error
 
 
 def main():
