@@ -1,10 +1,10 @@
-name: Test - Fetch and Summarize
+name: Test - Full Pipeline
 
 on:
   workflow_dispatch:
 
 jobs:
-  test-summarize:
+  test-pipeline:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repo
@@ -26,5 +26,14 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: python scripts/summarize.py
 
-      - name: Show the resulting brief
-        run: cat data/brief.json
+      - name: Run build_epub.py
+        run: python scripts/build_epub.py
+
+      - name: List generated EPUB
+        run: ls -la docs/briefs/
+
+      - name: Upload EPUB as downloadable artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: daily-brief-epub
+          path: docs/briefs/*.epub
