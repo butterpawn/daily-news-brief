@@ -1,0 +1,30 @@
+name: Test - Fetch and Summarize
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-summarize:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run fetch_news.py
+        run: python scripts/fetch_news.py
+
+      - name: Run summarize.py
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: python scripts/summarize.py
+
+      - name: Show the resulting brief
+        run: cat data/brief.json
