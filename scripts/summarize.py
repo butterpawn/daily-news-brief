@@ -28,7 +28,7 @@ log = logging.getLogger("summarize")
 ARTICLES_PATH = Path(__file__).parent.parent / "data" / "articles.json"
 BRIEF_PATH = Path(__file__).parent.parent / "data" / "brief.json"
 
-MODEL_NAME = "gemini-flash-latest"
+MODEL_NAME = "gemini-3.5-flash-lite"
 
 SECTION_TARGETS = {
     "malaysia": {"count": "3-5", "length": "2-4 sentences"},
