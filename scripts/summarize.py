@@ -13,7 +13,7 @@ import logging
 import os
 import sys
 import time
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 from google import genai
@@ -177,8 +177,14 @@ def main():
         log.error("Gemini call failed: " + str(e))
         sys.exit(1)
 
+    # Label the brief using Malaysia local date (UTC+8), since the
+    # scheduled run happens at 23:00 UTC = 07:00 MYT the next day --
+    # using UTC date here would label it as "yesterday" for the reader.
+    myt_offset = timezone(timedelta(hours=8))
+    myt_date = datetime.now(myt_offset).strftime("%Y-%m-%d")
+
     brief = {
-        "date": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
+        "date": myt_date,
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "sections": result.get("sections", {}),
     }
