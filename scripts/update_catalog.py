@@ -4,6 +4,10 @@ update_catalog.py
 Scans docs/briefs/ for EPUB files and rebuilds docs/catalog.xml, a
 valid OPDS 1.2 (Atom-based) catalog feed. CrossInk reads this file to
 list and download available Daily Brief editions, newest first.
+
+Uses absolute URLs throughout (not relative paths), since some OPDS
+clients -- including some CrossInk/CrossPoint firmware versions --
+don't reliably resolve relative acquisition links.
 """
 
 import logging
@@ -21,6 +25,9 @@ log = logging.getLogger("update_catalog")
 DOCS_DIR = Path(__file__).parent.parent / "docs"
 BRIEFS_DIR = DOCS_DIR / "briefs"
 CATALOG_PATH = DOCS_DIR / "catalog.xml"
+
+# Absolute base URL for this GitHub Pages site.
+BASE_URL = "https://butterpawn.github.io/daily-news-brief"
 
 FILENAME_PATTERN = re.compile(r"Daily-Brief-(\d{4}-\d{2}-\d{2})\.epub$")
 
@@ -61,7 +68,7 @@ def build_catalog_xml(briefs):
     for b in briefs:
         title = escape("Daily Brief \u2014 " + b["display_date"])
         entry_id = "daily-brief-" + b["date_str"]
-        link_href = escape("briefs/" + b["filename"])
+        link_href = escape(BASE_URL + "/briefs/" + b["filename"])
         updated = b["date_obj"].strftime("%Y-%m-%dT00:00:00Z")
 
         entries.append(
@@ -77,6 +84,7 @@ def build_catalog_xml(briefs):
         )
 
     entries_xml = "\n".join(entries)
+    self_url = escape(BASE_URL + "/catalog.xml")
 
     return (
         "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
@@ -89,10 +97,10 @@ def build_catalog_xml(briefs):
         "    <name>Daily Brief Bot</name>\n"
         "  </author>\n"
         "  <link rel=\"self\"\n"
-        "        href=\"catalog.xml\"\n"
+        "        href=\"" + self_url + "\"\n"
         "        type=\"application/atom+xml;profile=opds-catalog;kind=acquisition\"/>\n"
         "  <link rel=\"start\"\n"
-        "        href=\"catalog.xml\"\n"
+        "        href=\"" + self_url + "\"\n"
         "        type=\"application/atom+xml;profile=opds-catalog;kind=acquisition\"/>\n"
         + entries_xml + "\n"
         "</feed>\n"
