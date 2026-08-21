@@ -36,6 +36,9 @@ jobs:
       - name: Run build_epub.py
         run: python scripts/build_epub.py
 
+      - name: Run cleanup.py
+        run: python scripts/cleanup.py
+
       - name: Run update_catalog.py
         run: python scripts/update_catalog.py
 
