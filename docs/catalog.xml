@@ -3,7 +3,7 @@
       xmlns:opds="http://opds-spec.org/2010/catalog">
   <id>urn:uuid:daily-brief-catalog</id>
   <title>Daily Brief Library</title>
-  <updated>2026-08-21T09:08:04Z</updated>
+  <updated>2026-08-21T09:42:52Z</updated>
   <author>
     <name>Daily Brief Bot</name>
   </author>
