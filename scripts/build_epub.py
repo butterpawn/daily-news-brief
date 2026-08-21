@@ -2,16 +2,25 @@
 build_epub.py
 
 Turns data/brief.json into a reader-friendly EPUB for e-ink devices:
-simple typography, no images, clear headings, a working table of
-contents. Output: docs/briefs/Daily-Brief-YYYY-MM-DD.epub
+simple typography, minimal graphics, clear headings, a working table
+of contents, and a proper cover image for library thumbnails.
+Output: docs/briefs/Daily-Brief-YYYY-MM-DD.epub
 """
 
+import io
 import json
 import logging
 import sys
+from datetime import datetime
 from pathlib import Path
 
 from ebooklib import epub
+from PIL import Image, ImageDraw, ImageFont
+
+COVER_FONT_DIR = "/usr/share/fonts/truetype/dejavu"
+COVER_BG_COLOR = (196, 164, 132)   # warm camel/terracotta
+COVER_TEXT_COLOR = (40, 30, 25)    # near-black warm dark
+COVER_SIZE = (600, 800)
 
 logging.basicConfig(
     level=logging.INFO,
@@ -90,6 +99,32 @@ def render_quick_item_html(item):
     )
 
 
+def generate_cover_image(date_str):
+    """Renders a simple, e-ink-friendly cover image (no photos, just typography)."""
+    img = Image.new("RGB", COVER_SIZE, COVER_BG_COLOR)
+    draw = ImageDraw.Draw(img)
+
+    title_font = ImageFont.truetype(COVER_FONT_DIR + "/DejaVuSerif-Bold.ttf", 56)
+    date_font = ImageFont.truetype(COVER_FONT_DIR + "/DejaVuSerif.ttf", 28)
+
+    W, H = COVER_SIZE
+    title = "DAILY BRIEF"
+
+    bbox = draw.textbbox((0, 0), title, font=title_font)
+    tw = bbox[2] - bbox[0]
+    draw.text(((W - tw) / 2, H / 2 - 60), title, font=title_font, fill=COVER_TEXT_COLOR)
+
+    bbox2 = draw.textbbox((0, 0), date_str, font=date_font)
+    dw = bbox2[2] - bbox2[0]
+    draw.text(((W - dw) / 2, H / 2 + 30), date_str, font=date_font, fill=COVER_TEXT_COLOR)
+
+    draw.line([(W / 2 - 80, H / 2 + 10), (W / 2 + 80, H / 2 + 10)], fill=COVER_TEXT_COLOR, width=2)
+
+    buffer = io.BytesIO()
+    img.save(buffer, format="PNG")
+    return buffer.getvalue()
+
+
 def build_epub(brief):
     date_str = brief.get("date", "unknown-date")
 
@@ -98,6 +133,13 @@ def build_epub(brief):
     book.set_title("Daily Brief - " + date_str)
     book.set_language("en")
     book.add_author("Daily Brief Bot")
+
+    try:
+        display_date = datetime.strptime(date_str, "%Y-%m-%d").strftime("%-d %b %Y")
+    except ValueError:
+        display_date = date_str
+    cover_bytes = generate_cover_image(display_date)
+    book.set_cover("cover.png", cover_bytes, create_page=False)
 
     style = epub.EpubItem(
         uid="style",
