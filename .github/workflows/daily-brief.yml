@@ -1,0 +1,48 @@
+name: Daily Brief
+
+on:
+  schedule:
+    # Runs at 23:00 UTC = 07:00 Malaysia time (UTC+8) the next day
+    - cron: "0 23 * * *"
+  workflow_dispatch:
+    # Also allows manual triggering from the Actions tab anytime
+
+permissions:
+  contents: write
+
+jobs:
+  build-daily-brief:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run fetch_news.py
+        run: python scripts/fetch_news.py
+
+      - name: Run summarize.py
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: python scripts/summarize.py
+
+      - name: Run build_epub.py
+        run: python scripts/build_epub.py
+
+      - name: Run update_catalog.py
+        run: python scripts/update_catalog.py
+
+      - name: Commit and push generated files
+        run: |
+          git config user.name "Daily Brief Bot"
+          git config user.email "actions@github.com"
+          git add docs/
+          git diff --staged --quiet && echo "Nothing new to commit" || git commit -m "Daily brief for $(date +%Y-%m-%d)"
+          git push
