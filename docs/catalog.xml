@@ -3,7 +3,7 @@
       xmlns:opds="http://opds-spec.org/2010/catalog">
   <id>urn:uuid:daily-brief-catalog</id>
   <title>Daily Brief Library</title>
-  <updated>2026-08-25T23:51:02Z</updated>
+  <updated>2026-08-28T06:08:48Z</updated>
   <author>
     <name>Daily Brief Bot</name>
   </author>
@@ -13,6 +13,15 @@
   <link rel="start"
         href="https://butterpawn.github.io/daily-news-brief/catalog.xml"
         type="application/atom+xml;profile=opds-catalog;kind=acquisition"/>
+  <entry>
+    <title>Daily Brief — 28 Aug 2026</title>
+    <id>urn:uuid:daily-brief-2026-08-28</id>
+    <updated>2026-08-28T00:00:00Z</updated>
+    <content type="text">Daily news brief for 28 Aug 2026.</content>
+    <link rel="http://opds-spec.org/acquisition"
+          href="https://butterpawn.github.io/daily-news-brief/briefs/Daily-Brief-2026-08-28.epub"
+          type="application/epub+zip"/>
+  </entry>
   <entry>
     <title>Daily Brief — 26 Aug 2026</title>
     <id>urn:uuid:daily-brief-2026-08-26</id>
@@ -56,24 +65,6 @@
     <content type="text">Daily news brief for 22 Aug 2026.</content>
     <link rel="http://opds-spec.org/acquisition"
           href="https://butterpawn.github.io/daily-news-brief/briefs/Daily-Brief-2026-08-22.epub"
-          type="application/epub+zip"/>
-  </entry>
-  <entry>
-    <title>Daily Brief — 21 Aug 2026</title>
-    <id>urn:uuid:daily-brief-2026-08-21</id>
-    <updated>2026-08-21T00:00:00Z</updated>
-    <content type="text">Daily news brief for 21 Aug 2026.</content>
-    <link rel="http://opds-spec.org/acquisition"
-          href="https://butterpawn.github.io/daily-news-brief/briefs/Daily-Brief-2026-08-21.epub"
-          type="application/epub+zip"/>
-  </entry>
-  <entry>
-    <title>Daily Brief — 20 Aug 2026</title>
-    <id>urn:uuid:daily-brief-2026-08-20</id>
-    <updated>2026-08-20T00:00:00Z</updated>
-    <content type="text">Daily news brief for 20 Aug 2026.</content>
-    <link rel="http://opds-spec.org/acquisition"
-          href="https://butterpawn.github.io/daily-news-brief/briefs/Daily-Brief-2026-08-20.epub"
           type="application/epub+zip"/>
   </entry>
 </feed>
