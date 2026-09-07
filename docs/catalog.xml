@@ -3,7 +3,7 @@
       xmlns:opds="http://opds-spec.org/2010/catalog">
   <id>urn:uuid:daily-brief-catalog</id>
   <title>Daily Brief Library</title>
-  <updated>2026-09-06T23:06:37Z</updated>
+  <updated>2026-09-07T23:06:07Z</updated>
   <author>
     <name>Daily Brief Bot</name>
   </author>
@@ -13,6 +13,15 @@
   <link rel="start"
         href="https://butterpawn.github.io/daily-news-brief/catalog.xml"
         type="application/atom+xml;profile=opds-catalog;kind=acquisition"/>
+  <entry>
+    <title>Daily Brief — 8 Sep 2026</title>
+    <id>urn:uuid:daily-brief-2026-09-08</id>
+    <updated>2026-09-08T00:00:00Z</updated>
+    <content type="text">Daily news brief for 8 Sep 2026.</content>
+    <link rel="http://opds-spec.org/acquisition"
+          href="https://butterpawn.github.io/daily-news-brief/briefs/Daily-Brief-2026-09-08.epub"
+          type="application/epub+zip"/>
+  </entry>
   <entry>
     <title>Daily Brief — 7 Sep 2026</title>
     <id>urn:uuid:daily-brief-2026-09-07</id>
@@ -65,15 +74,6 @@
     <content type="text">Daily news brief for 2 Sep 2026.</content>
     <link rel="http://opds-spec.org/acquisition"
           href="https://butterpawn.github.io/daily-news-brief/briefs/Daily-Brief-2026-09-02.epub"
-          type="application/epub+zip"/>
-  </entry>
-  <entry>
-    <title>Daily Brief — 1 Sep 2026</title>
-    <id>urn:uuid:daily-brief-2026-09-01</id>
-    <updated>2026-09-01T00:00:00Z</updated>
-    <content type="text">Daily news brief for 1 Sep 2026.</content>
-    <link rel="http://opds-spec.org/acquisition"
-          href="https://butterpawn.github.io/daily-news-brief/briefs/Daily-Brief-2026-09-01.epub"
           type="application/epub+zip"/>
   </entry>
 </feed>
